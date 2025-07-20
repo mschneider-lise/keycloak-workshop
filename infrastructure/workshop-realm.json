@@ -47,6 +47,14 @@
   "failureFactor" : 30,
   "roles" : {
     "realm" : [ {
+      "id" : "566af30c-ca75-4791-a264-c387d34dc595",
+      "name" : "workshop-role",
+      "description" : "",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "fbbd3819-6843-4330-9b8b-885d734ec994",
+      "attributes" : { }
+    }, {
       "id" : "a53827d3-eed5-4bac-ac3d-7c347afab1a7",
       "name" : "offline_access",
       "description" : "${role_offline-access}",
@@ -401,7 +409,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-workshop" ],
+    "realmRoles" : [ "workshop-role", "default-roles-workshop" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],
