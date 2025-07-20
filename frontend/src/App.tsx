@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { PublicApp } from "./PublicApp.tsx";
 import { SecuredApp } from "./SecuredApp.tsx";
 import { AppLayout } from "./AppLayout.tsx";
-import { useCallback } from "react";
+import { hasAuthParams, useAuth } from "react-oidc-context";
+import { type ReactNode, useCallback, useEffect } from "react";
 
 function App() {
   // TODO: 302 - Implement log out
@@ -27,11 +28,48 @@ function App() {
           }
         >
           <Route path="/" element={<PublicApp />} />
-          <Route path="/secured" element={<SecuredApp token={token} />} />
+          <Route
+            path="/secured"
+            element={
+              <AuthWrapper>
+                <SecuredApp token={token} />
+              </AuthWrapper>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
   );
+}
+
+function AuthWrapper({ children }: { children: ReactNode }) {
+  const auth = useAuth();
+
+  useEffect(() => {
+    const signinRedirect = auth.signinRedirect;
+
+    if (
+      !hasAuthParams() &&
+      !auth.isAuthenticated &&
+      !auth.activeNavigator &&
+      !auth.isLoading
+    ) {
+      signinRedirect({
+        redirect_uri: window.location.href,
+      });
+    }
+  }, [
+    auth.activeNavigator,
+    auth.isAuthenticated,
+    auth.isLoading,
+    auth.signinRedirect,
+  ]);
+
+  if (auth.isLoading || !auth.isAuthenticated) {
+    return "...loading";
+  }
+
+  return children;
 }
 
 export default App;
