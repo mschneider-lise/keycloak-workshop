@@ -6,18 +6,16 @@ import { hasAuthParams, useAuth } from "react-oidc-context";
 import { type ReactNode, useCallback, useEffect } from "react";
 
 function App() {
-  const { signoutRedirect } = useAuth();
+  const { signoutRedirect, isAuthenticated, user } = useAuth();
 
   // 302
   const handleLogout = useCallback(() => {
     signoutRedirect({ post_logout_redirect_uri: "http://localhost:3000/" });
   }, [signoutRedirect]);
 
-  // TODO: 403 - Set these to the actual values
-  const isAuthenticated = true;
-  const username = "Max Mustermann";
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
+  // 403
+  const username = user?.profile?.name;
+  const token = user?.access_token;
 
   return (
     <BrowserRouter>
